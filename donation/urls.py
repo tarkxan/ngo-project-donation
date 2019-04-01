@@ -10,10 +10,8 @@ urlpatterns = [
     path('users/<int:pk>/edit/', UserEdit.as_view(), name='user_edit'),
     path('donation/new', DonationCreate.as_view(), name='donation_create'),
     path('dtypes/', DonationTypeList.as_view(), name = 'dtype_list'),
-    path('accounts/login/', LoginView.as_view(extra_context={
-        'next': reverse_lazy('donation:index')
-    }), name='login'),
-    path('accounts/logout/', LogoutView.as_view(next_page=
-        reverse_lazy('donation:index')
-    ), name='logout'),
+    path('login/', LoginView.as_view(
+        extra_context={'next': reverse_lazy('donation:index')}
+    ), name='login'),
+    path('logout/', LogoutView.as_view(next_page=reverse_lazy('donation:index')), name='logout'),
 ]
