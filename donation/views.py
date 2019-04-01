@@ -1,5 +1,6 @@
 from django.urls import reverse_lazy
-from django.views.generic import ListView, UpdateView, FormView
+from django.views import View
+from django.views.generic import ListView, UpdateView, FormView, TemplateView
 
 from donation.forms import DonationCreateForm
 from donation.models import Donation, DonationUser, DonationType
@@ -46,7 +47,7 @@ def get_sidebar_urls(user):
         ],
         AUTH_REGULAR: [
             {
-                'name': 'View Donations',
+                'name': 'View Donation Types',
                 'url': reverse_lazy('donation:index'),
             },
             {
@@ -58,8 +59,8 @@ def get_sidebar_urls(user):
                 'url': reverse_lazy('donation:donation_create')
             },
             {
-                'name': 'View Donation Types',
-                'url': reverse_lazy('donation:dtype_list')
+                'name': 'View Donations',
+                'url': reverse_lazy('donation:donation_list')
             },
         ],
     }.get(auth, [])
@@ -152,7 +153,7 @@ class DonationTypeList(ListView):
         auth = get_auth_status(user)
         queryset = {
             AUTH_ADMIN: DonationType.objects.all(),
-            AUTH_REGULAR: DonationType.objects.all(),
+            AUTH_REGULAR: DonationType.objects.filter(is_active=True),
         }.get(auth, DonationType.objects.none())
         return queryset
 
@@ -161,3 +162,17 @@ class DonationTypeList(ListView):
         context = super(DonationTypeList, self).get_context_data(*args, object_list=object_list, **kwargs)
         context['sidebar_urls'] = get_sidebar_urls(user)
         return context
+
+
+class HomeView(TemplateView):
+    template_name = 'donation/home.html'
+
+
+class IndexView(View):
+    def get(self, request, *args, **kwargs):
+        auth = get_auth_status(self.request.user)
+        view = {
+            AUTH_ADMIN: DonationList.as_view(),
+            AUTH_REGULAR: DonationTypeList.as_view(),
+        }.get(auth, HomeView.as_view())
+        return view(request, *args, **kwargs)
