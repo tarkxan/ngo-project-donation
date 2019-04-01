@@ -1,0 +1,14 @@
+{% extends "donation/base.html" %}
+
+
+{% block content %}
+
+{% if user.role == "AD" %}
+{% include "donation/donation/list_all_content.html" %}
+{% elif user.role == "RG" %}
+{% include "donation/donation/list_user_content.html" %}
+{% else %}
+{% include "donation/donation/list_unauthenticated_content.html" %}
+{% endif %}
+
+{% endblock %}
