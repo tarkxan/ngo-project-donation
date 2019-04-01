@@ -8,9 +8,9 @@ urlpatterns = [
     path('', DonationList.as_view(), name='index'),
     path('users/', UserList.as_view(), name='user_list'),
     path('accounts/login/', LoginView.as_view(extra_context={
-        'next': reverse_lazy('product:list')
+        'next': reverse_lazy('donation:index')
     }), name='login'),
     path('accounts/logout/', LogoutView.as_view(next_page=
-        reverse_lazy('product:list')
+        reverse_lazy('donation:index')
     ), name='logout'),
 ]

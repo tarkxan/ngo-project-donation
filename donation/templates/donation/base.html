@@ -59,6 +59,7 @@
 </div>
 <div id="sidebar">
     {% block sidebar %}
+        {% include "donation/login_status.html" %}
         {% if sidebar_urls %}
             {% for url in sidebar_urls %}
                 {% if url.url == request.path %}
@@ -67,8 +68,6 @@
                 <p><a href="{{url.url}}">{{url.name}}</a></p>
                 {% endif %}
             {% endfor %}
-        {% else %}
-        <p>No links have been configured</p>
         {% endif %}
     {% endblock %}
 </div>
