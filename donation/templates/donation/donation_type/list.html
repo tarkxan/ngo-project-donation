@@ -1,0 +1,67 @@
+{% extends "donation/base.html" %}
+
+{% block content %}
+
+    {% if user.role == "AD" %}
+
+        <h1 class="mb-5">Manage Donation Types</h1>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Donation Type</th>
+                <th scope="col">Is Active</th>
+                <th scope="col">Monthly Billing</th>
+                <th scope="col"></th>
+                <th scope="col"><a href="#" class="btn btn-secondary">Add new</a></th>
+            </tr>
+            </thead>
+
+            {% for type in donation_types %}
+
+                <tbody>
+                    <tr>
+                        <td> {{ type.name }} </td>
+                        <td> {{ type.is_active }} </td>
+                        <td> {{ type.monthly_billing }} </td>
+                        <td> <a href="#" class="btn btn-secondary">Edit</a></td>
+                        <td> <a href="#" class="btn btn-secondary">Delete</a></td>
+                    </tr>
+                </tbody>
+
+            {% endfor %}
+        </table>
+
+    {% elif user.role == "RG" %}
+
+        <h1 class="mb-5">Make a Donation</h1>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Donation Type</th>
+                    <th scope="col">Monthly Billing</th>
+                </tr>
+            </thead>
+
+            {% for type in donation_types %}
+
+                <tbody>
+                    <tr>
+                        <td> {{ type.name }} </td>
+                        <td> {{ type.monthly_billing }} </td>
+                    </tr>
+                </tbody>
+
+
+            {% endfor %}
+
+            <th scope="col"><a href="#" class="btn btn-secondary">Donate</a></th>
+        </table>
+
+    {% else %}
+        Please log in to see this page
+
+    {% endif %}
+
+{% endblock %}

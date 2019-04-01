@@ -39,6 +39,10 @@ def get_sidebar_urls(user):
                 'name': 'Make donation',
                 'url': reverse_lazy('donation:donation_create')
             },
+            {
+                'name': 'View Donation Types',
+                'url': reverse_lazy('donation:dtype_list')
+            },
         ],
         AUTH_REGULAR: [
             {
@@ -49,6 +53,14 @@ def get_sidebar_urls(user):
                 'name': 'Edit User Information',
                 'url': reverse_lazy('donation:user_edit', kwargs={'pk': user.pk})
             },
+            {
+                'name': 'Make donation',
+                'url': reverse_lazy('donation:donation_create')
+            },
+            {
+                'name': 'View Donation Types',
+                'url': reverse_lazy('donation:dtype_list')
+            },
         ],
     }.get(auth, [])
     return urls
@@ -56,7 +68,7 @@ def get_sidebar_urls(user):
 
 class UserList(ListView):
     context_object_name = 'users'
-    template_name = 'donation/list.html'
+    template_name = 'donation/user/list.html'
 
     def get_queryset(self):
         user = self.request.user
@@ -129,3 +141,23 @@ class DonationCreate(FormView):
     def form_valid(self, form):
         print('cleaned_data: ', form.cleaned_data)
         return super().form_valid(form)
+
+
+class DonationTypeList(ListView):
+    context_object_name = 'donation_types'
+    template_name = 'donation/donation_type/list.html'
+
+    def get_queryset(self):
+        user = self.request.user
+        auth = get_auth_status(user)
+        queryset = {
+            AUTH_ADMIN: DonationType.objects.all(),
+            AUTH_REGULAR: DonationType.objects.all(),
+        }.get(auth, DonationType.objects.none())
+        return queryset
+
+    def get_context_data(self, *args, object_list=None, **kwargs):
+        user = self.request.user
+        context = super(DonationTypeList, self).get_context_data(*args, object_list=object_list, **kwargs)
+        context['sidebar_urls'] = get_sidebar_urls(user)
+        return context
