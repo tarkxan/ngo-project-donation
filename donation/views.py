@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from django.views.generic import ListView
+from django.views.generic import ListView, UpdateView
 
 from donation.models import Donation, DonationUser
 
@@ -31,11 +31,19 @@ def get_sidebar_urls(user):
                 'name': 'View Donations',
                 'url': reverse_lazy('donation:index'),
             },
+            {
+                'name': 'Edit User Information',
+                'url': reverse_lazy('donation:user_edit', kwargs={'pk': user.pk})
+            },
         ],
         AUTH_REGULAR: [
             {
                 'name': 'View Donations',
                 'url': reverse_lazy('donation:index'),
+            },
+            {
+                'name': 'Edit User Information',
+                'url': reverse_lazy('donation:user_edit', kwargs={'pk': user.pk})
             },
         ],
     }.get(auth, [])
@@ -82,3 +90,21 @@ class DonationList(ListView):
         context['sidebar_urls'] = get_sidebar_urls(user)
         return context
 
+
+class UserEdit(UpdateView):
+    model = DonationUser
+    template_name = 'donation/user/edit.html'
+    fields = [
+        'first_name', 'last_name', 'email', 'phone_number',
+        'main_address', 'alt_address', 'city',
+        'state', 'zip_code', 'country',
+    ]
+
+    def get_success_url(self):
+        return reverse_lazy('donation:index')
+
+    def get_context_data(self, *args, object_list=None, **kwargs):
+        user = self.request.user
+        context = super(UserEdit, self).get_context_data(*args, object_list=object_list, **kwargs)
+        context['sidebar_urls'] = get_sidebar_urls(user)
+        return context
