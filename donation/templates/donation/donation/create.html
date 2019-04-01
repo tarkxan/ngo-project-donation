@@ -1,0 +1,35 @@
+{% extends "donation/base.html" %}
+
+
+{% block content %}
+
+{% if donation_types %}
+<h1>Gifts</h1>
+<form method="post" enctype="multipart/form-data" action="">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <th></th>
+            <th></th>
+            <th>Click for Monthly Recurring Gift</th>
+        </tr>
+        {% for field in form %}
+            {% if not forloop.counter|divisibleby:2 %}
+            <tr>
+                <td>{{field.label}}</td>
+                <td><input type="number" name="{{ field.name }}" /></td>
+            {% else %}
+                {% if field.label %}
+                <td><input type="checkbox" name="{{ field.name }}" /></td>
+                {% endif %}
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+    <input type="submit" value="Submit"/>
+</form>
+{% else %}
+<p>Sorry, donation isn't open at this time.</p>
+{% endif %}
+
+{% endblock %}

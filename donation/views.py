@@ -1,8 +1,8 @@
 from django.urls import reverse_lazy
-from django.views.generic import ListView, UpdateView
+from django.views.generic import ListView, UpdateView, FormView
 
-from donation.models import Donation, DonationUser
-
+from donation.forms import DonationCreateForm
+from donation.models import Donation, DonationUser, DonationType
 
 AUTH_REGULAR = 'RG'
 AUTH_ADMIN = 'AD'
@@ -34,6 +34,10 @@ def get_sidebar_urls(user):
             {
                 'name': 'Edit User Information',
                 'url': reverse_lazy('donation:user_edit', kwargs={'pk': user.pk})
+            },
+            {
+                'name': 'Make donation',
+                'url': reverse_lazy('donation:donation_create')
             },
         ],
         AUTH_REGULAR: [
@@ -108,3 +112,20 @@ class UserEdit(UpdateView):
         context = super(UserEdit, self).get_context_data(*args, object_list=object_list, **kwargs)
         context['sidebar_urls'] = get_sidebar_urls(user)
         return context
+
+
+class DonationCreate(FormView):
+    template_name = 'donation/donation/create.html'
+    form_class = DonationCreateForm
+    success_url = reverse_lazy('donation:index')
+
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        context = super(DonationCreate, self).get_context_data(**kwargs)
+        context['sidebar_urls'] = get_sidebar_urls(user)
+        context['donation_types'] = DonationType.objects.filter(is_active=True)
+        return context
+
+    def form_valid(self, form):
+        print('cleaned_data: ', form.cleaned_data)
+        return super().form_valid(form)
