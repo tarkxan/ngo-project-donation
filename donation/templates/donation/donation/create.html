@@ -5,16 +5,18 @@
 
 {% if donation_types %}
 <h1>Gifts</h1>
+
 {% if form.errors %}
-{% for field in form %}
-{% if field.errors %}
-<p>Field "{{ field.name }}" has some errors</p>
-{% for error in field.errors %}
-<p>{{ error|escape }}</p>
-{% endfor %}
+    {% for field in form %}
+        {% if field.errors %}
+        <p>Field "{{ field.name }}" has some errors</p>
+            {% for error in field.errors %}
+            <p>{{ error|escape }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
 {% endif %}
-{% endfor %}
-{% endif %}
+
 <form method="post" enctype="multipart/form-data" action="">
     {% csrf_token %}
     <table>

@@ -10,7 +10,6 @@
             <thead>
             <tr>
                 <th scope="col">Donation Type</th>
-                <th scope="col">Is Active</th>
                 <th scope="col">Monthly Billing</th>
                 <th scope="col"></th>
                 <th scope="col"><a href="#" class="btn btn-secondary">Add new</a></th>
@@ -22,10 +21,9 @@
                 <tbody>
                     <tr>
                         <td> {{ type.name }} </td>
-                        <td> {{ type.is_active }} </td>
                         <td> {{ type.monthly_billing }} </td>
                         <td> <a href="#" class="btn btn-secondary">Edit</a></td>
-                        <td> <a href="#" class="btn btn-secondary">Delete</a></td>
+                        <td> <a href="{% url 'donation:dtype_remove' type.id %}" class="btn btn-secondary">Remove</a></td>
                     </tr>
                 </tbody>
 

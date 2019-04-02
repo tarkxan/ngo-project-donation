@@ -1,0 +1,25 @@
+{% extends "donation/base.html" %}
+
+
+{% block content %}
+
+{% if form.errors %}
+    {% for field in form %}
+        {% if field.errors %}
+        <p>Field "{{ field.name }}" has some errors</p>
+            {% for error in field.errors %}
+            <p>{{ error|escape }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<h3>Warning! The donation type "{{ name }}" will be removed!</h3>
+<p>If you are sure you want to delete the donation type, click confirm.</p>
+<form method="post" enctype="multipart/form-data" action="">
+    {% csrf_token %}
+    <input type="hidden" name="is_active" />
+    <input type="submit" value="Confirm" />
+</form>
+
+{% endblock %}

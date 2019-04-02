@@ -169,7 +169,7 @@ class DonationTypeList(ListView):
         user = self.request.user
         auth = get_auth_status(user)
         queryset = {
-            AUTH_ADMIN: DonationType.objects.all(),
+            AUTH_ADMIN: DonationType.objects.filter(is_active=True),
             AUTH_REGULAR: DonationType.objects.filter(is_active=True),
         }.get(auth, DonationType.objects.none())
         return queryset
@@ -193,3 +193,19 @@ class IndexView(View):
             AUTH_REGULAR: DonationTypeList.as_view(),
         }.get(auth, HomeView.as_view())
         return view(request, *args, **kwargs)
+
+
+class DonationTypeRemove(UpdateView):
+    model = DonationType
+    template_name = 'donation/donation_type/remove.html'
+    fields = ['is_active']
+
+    def get_success_url(self):
+        return reverse_lazy('donation:dtype_list')
+
+    def get_context_data(self, *args, object_list=None, **kwargs):
+        user = self.request.user
+        context = super(DonationTypeRemove, self).get_context_data(*args, object_list=object_list, **kwargs)
+        context['sidebar_urls'] = get_sidebar_urls(user)
+        context['name'] = self.object.name
+        return context
