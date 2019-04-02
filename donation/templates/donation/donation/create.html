@@ -32,10 +32,10 @@
                 {% if not forloop.counter|divisibleby:2 %}
                 <tr>
                     <td>{{ field.label }}</td>
-                    <td><input type="number" name="{{ field.name }}" /></td>
+                    <td><input type="number" name="{{ field.name }}" value="{{ field.value }}" /></td>
                 {% else %}
                     {% if field.label %}
-                    <td><input type="checkbox" name="{{ field.name }}" /></td>
+                    <td><input type="checkbox" name="{{ field.name }}" {% if field.value %}checked{% endif %} /></td>
                     {% endif %}
                 </tr>
                 {% endif %}

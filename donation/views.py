@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, UpdateView, FormView, TemplateView
@@ -132,6 +134,15 @@ class DonationCreate(FormView):
     form_class = DonationCreateForm
     success_url = reverse_lazy('donation:index')
 
+    def get_initial(self):
+        initial = super(DonationCreate, self).get_initial()
+        items = self.request.session['donation_items']
+        for item in items:
+            pk = item[0]
+            initial['amount_{}'.format(pk)] = Decimal(item[1]['amount'])
+            initial['recurring_{}'.format(pk)] = item[1]['recurrence']
+        return initial
+
     def get_context_data(self, **kwargs):
         user = self.request.user
         context = super(DonationCreate, self).get_context_data(**kwargs)
@@ -161,6 +172,7 @@ class DonationCreate(FormView):
         # self.make_donations(data)
         self.request.session['user_id'] = data[0]
         self.request.session['donation_items'] = data[1]
+        self.request.session.modified = True
         return super().form_valid(form)
 
 
