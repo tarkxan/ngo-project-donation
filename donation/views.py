@@ -139,8 +139,25 @@ class DonationCreate(FormView):
         context['donation_types'] = DonationType.objects.filter(is_active=True)
         return context
 
+    @staticmethod
+    def make_donations(data):
+        user = DonationUser.objects.get(pk=data[0])
+        for item in data[1]:
+            type = DonationType.objects.get(pk=item[0])
+            amount = item[1]['amount']
+            recurrence = item[1]['recurrence']
+            Donation(user=user, type=type, monthly_billing=recurrence, amount=amount).save()
+
     def form_valid(self, form):
-        print('cleaned_data: ', form.cleaned_data)
+        pks = [int(s[7:]) for s in [k for k in form.cleaned_data.keys()][:-1:2]]
+        amounts = [v for v in form.cleaned_data.values()][:-1:2]
+        recurrences = [v for v in form.cleaned_data.values()][1:-1:2]
+        data = (form.cleaned_data['user_id'], [
+            (pk, {'amount': amount, 'recurrence': recurrence})
+            for pk, amount, recurrence in zip(pks, amounts, recurrences)
+            if amount
+        ])
+        self.make_donations(data)
         return super().form_valid(form)
 
 
