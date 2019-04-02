@@ -164,7 +164,7 @@ class DonationCreate(FormView):
         amounts = [v for v in form.cleaned_data.values()][:-1:2]
         recurrences = [v for v in form.cleaned_data.values()][1:-1:2]
         data = (int(form.cleaned_data['user_id']), [
-            (pk, {'amount': str(amount), 'recurrence': recurrence})
+            (pk, {'amount': str(amount), 'recurrence': recurrence, 'quantity':1})
             for pk, amount, recurrence in zip(pks, amounts, recurrences)
             if amount
         ])

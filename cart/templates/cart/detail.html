@@ -1,0 +1,41 @@
+
+
+
+{% block content %}
+
+{% if items %}
+<table>
+    <tr>
+        <th>Item Name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total</th>
+    </tr>
+    {% for item in items %}
+    <tr>
+        <td>{{ item.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.price }}</td>
+        <td>{{ item.total }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>Sorry, there is a problem.</p>
+{% endif %}
+
+{% endblock %}
+
+
+{% block sidebar %}
+
+<p><strong>{{ cart.num_items }} item(s) in cart</strong></p><hr />
+<h3>Order Summary</h3>
+<table>
+    <tr>
+        <td>Item Subtotal</td>
+        <td>${{ cart.get_total_price }}</td>
+    </tr>
+</table>
+
+{% endblock %}
