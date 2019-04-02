@@ -21,8 +21,10 @@
     {% endfor %}
 </table>
 {% else %}
-<p>Sorry, there is a problem.</p>
+<p>There are no items in the cart.</p>
 {% endif %}
+
+<p><a href="{% url 'donation:donation_create' %}">Back to donations</a></p>
 
 {% endblock %}
 
@@ -37,5 +39,12 @@
         <td>${{ cart.get_total_price }}</td>
     </tr>
 </table>
+
+{% if cart.num_items > 0 %}
+<p><a href="#">Continue to checkout</a></p>
+{% else %}
+<p><strong>Add items to cart to checkout!</strong></p>
+{% endif %}
+
 
 {% endblock %}

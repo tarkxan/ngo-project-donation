@@ -132,7 +132,7 @@ class UserEdit(UpdateView):
 class DonationCreate(FormView):
     template_name = 'donation/donation/create.html'
     form_class = DonationCreateForm
-    success_url = reverse_lazy('donation:index')
+    success_url = reverse_lazy('cart:detail')
 
     def get_initial(self):
         initial = super(DonationCreate, self).get_initial()
