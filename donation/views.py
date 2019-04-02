@@ -152,12 +152,15 @@ class DonationCreate(FormView):
         pks = [int(s[7:]) for s in [k for k in form.cleaned_data.keys()][:-1:2]]
         amounts = [v for v in form.cleaned_data.values()][:-1:2]
         recurrences = [v for v in form.cleaned_data.values()][1:-1:2]
-        data = (form.cleaned_data['user_id'], [
-            (pk, {'amount': amount, 'recurrence': recurrence})
+        data = (int(form.cleaned_data['user_id']), [
+            (pk, {'amount': str(amount), 'recurrence': recurrence})
             for pk, amount, recurrence in zip(pks, amounts, recurrences)
             if amount
         ])
-        self.make_donations(data)
+        # Do not save the data yet. Go to the cart first
+        # self.make_donations(data)
+        self.request.session['user_id'] = data[0]
+        self.request.session['donation_items'] = data[1]
         return super().form_valid(form)
 
 
