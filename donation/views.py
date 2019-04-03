@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, UpdateView, FormView, TemplateView
@@ -136,7 +137,9 @@ class DonationCreate(FormView):
 
     def get_initial(self):
         initial = super(DonationCreate, self).get_initial()
-        items = self.request.session['donation_items'] if 'donation_items' in self.request.session else []
+        items = self.request.session['donation_items']\
+            if 'donation_items' in self.request.session and self.request.session['donation_items']\
+            else []
         for item in items:
             pk = item[0]
             initial['amount_{}'.format(pk)] = Decimal(item[1]['amount'])
@@ -159,7 +162,15 @@ class DonationCreate(FormView):
             recurrence = item[1]['recurrence']
             Donation(user=user, type=type, monthly_billing=recurrence, amount=amount).save()
 
+    def cancel_donation(self):
+        self.request.session.pop('user_id', None)
+        self.request.session.pop('donation_items', None)
+        return redirect('donation:index')
+
     def form_valid(self, form):
+        if 'cancel' in self.request.POST:
+            return self.cancel_donation()
+
         pks = [int(s[7:]) for s in [k for k in form.cleaned_data.keys()][:-1:2]]
         amounts = [v for v in form.cleaned_data.values()][:-1:2]
         recurrences = [v for v in form.cleaned_data.values()][1:-1:2]
