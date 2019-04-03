@@ -153,15 +153,6 @@ class DonationCreate(FormView):
         context['donation_types'] = DonationType.objects.filter(is_active=True)
         return context
 
-    @staticmethod
-    def make_donations(data):
-        user = DonationUser.objects.get(pk=data[0])
-        for item in data[1]:
-            type = DonationType.objects.get(pk=item[0])
-            amount = item[1]['amount']
-            recurrence = item[1]['recurrence']
-            Donation(user=user, type=type, monthly_billing=recurrence, amount=amount).save()
-
     def cancel_donation(self):
         self.request.session.pop('user_id', None)
         self.request.session.pop('donation_items', None)

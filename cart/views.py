@@ -3,7 +3,7 @@ from django.views.generic import FormView, TemplateView
 
 from cart.cart import Cart
 from cart.forms import CheckoutForm
-from donation.models import DonationType
+from donation.models import DonationType, DonationUser, Donation
 
 
 class CartDetail(FormView):
@@ -27,9 +27,19 @@ class CartDetail(FormView):
         context['items'] = context_items
         return context
 
+    @staticmethod
+    def make_donations(request):
+        user = request.user
+        data = request.session['donation_items']
+        for item in data:
+            type = DonationType.objects.get(pk=item[0])
+            amount = item[1]['amount']
+            recurrence = item[1]['recurrence']
+            Donation(user=user, type=type, monthly_billing=recurrence, amount=amount).save()
+
     def form_valid(self, form):
-        # Make the donations
-        # Clear the cart
+        self.make_donations(self.request)
+        Cart(self.request).clear()
         # Send the email
         return super().form_valid(form)
 
