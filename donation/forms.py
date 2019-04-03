@@ -13,7 +13,7 @@ class DonationCreateForm(forms.Form):
         for obj, i in zip(objs, range(len(objs))):
             self.fields['amount_{}'.format(obj.pk)] = DecimalField(
                 max_digits=12, decimal_places=2,
-                validators=[MinValueValidator(Decimal(0.01))],
+                validators=[MinValueValidator(Decimal('0.01'))],
                 required=False
             )
             self.fields['amount_{}'.format(obj.pk)].label = obj.name

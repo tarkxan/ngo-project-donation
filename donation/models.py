@@ -56,7 +56,7 @@ class Donation(models.Model):
         max_digits=12,
         decimal_places=2,
         validators=[
-            MinValueValidator(Decimal(0.01))
+            MinValueValidator(Decimal('0.01'))
         ]
     )
 
