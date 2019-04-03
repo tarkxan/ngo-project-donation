@@ -1,0 +1,27 @@
+{% extends "cart/base.html" %}
+
+
+{% block title %}Checkout{% endblock %}
+{% block header %}<h1>Checkout</h1>{% endblock %}
+
+
+{% block css %}
+{{ block.super }}
+#content {
+    grid-column: 1 / 3;
+}
+#sidebar {
+    position: absolute;
+    padding: 0px;
+}
+{% endblock %}
+
+
+{% block content %}
+
+<p>Thank you for your donation.</p>
+<p>An email has been sent to {{ request.user.email }} in confirmation of your donation.</p>
+<p><a href="{% url 'donation:index' %}">Return to donation page</a></p>
+
+{% endblock %}
+
