@@ -6,6 +6,7 @@
     </title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Serif+TC|Patua+One|Playfair+Display|Libre+Baskerville" rel="stylesheet">
     <style>
         {% block css %}
         body, p, h1 {
@@ -14,20 +15,27 @@
         p {
             margin-bottom: 10px;
         }
+        .table{
+            color: #5c8d89;
+        }
         #container {
             display: grid;
             grid-template-columns: 70% 30%;
         }
         #header {
-            background-color: #79B;
+            background-color: #98ccd3;
             grid-column-start: 1;
             grid-column-end: 3;
+            color: #1d5464;
         }
         #content, #background {
-            background-color: #6E6;
+            background-color: #f3f9fb;
+            font-family: 'Playfair Display', serif;
+            color: #298f9b;
         }
         #sidebar {
-            background-color: #F99;
+            background-color: #e9eec9;
+            color: #207e82;
         }
         #header {
             padding: 30px;
