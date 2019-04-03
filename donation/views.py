@@ -136,7 +136,7 @@ class DonationCreate(FormView):
 
     def get_initial(self):
         initial = super(DonationCreate, self).get_initial()
-        items = self.request.session['donation_items']
+        items = self.request.session['donation_items'] if 'donation_items' in self.request.session else []
         for item in items:
             pk = item[0]
             initial['amount_{}'.format(pk)] = Decimal(item[1]['amount'])
