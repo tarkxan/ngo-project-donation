@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        {% block title %}NGO - Donation{% endblock %}
+    </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        {% block css %}
+        body, p, h1 {
+            margin: 0px;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        #container {
+            display: grid;
+            grid-template-columns: 70% 30%;
+        }
+        #header {
+            background-color: #79B;
+            grid-column-start: 1;
+            grid-column-end: 3;
+        }
+        #content, #background {
+            background-color: #6E6;
+        }
+        #sidebar {
+            background-color: #F99;
+        }
+        #header {
+            padding: 30px;
+        }
+        #sidebar, #content {
+            padding: 20px;
+        }
+        #background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+        {% endblock %}
+    </style>
+</head>
+<div id="container">
+<div id="header">
+    {% block header %}<h1>NGO Donation Site</h1>{% endblock %}
+</div>
+<div id="content">
+    {% block content %}
+    {% lorem 10 p %}
+    {% endblock %}
+</div>
+<div id="sidebar">
+    {% block sidebar %}
+    {% endblock %}
+</div>
+</div>
+<div id="background">
+</div>
+</html>
